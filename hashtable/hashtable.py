@@ -13,20 +13,13 @@ MIN_CAPACITY = 8
 
 
 class HashTable:
-    """
-    A hash table that with `capacity` buckets
-    that accepts string keys
-
-    Implement this.
-    """
-
     def __init__(self, capacity):
         self.capacity = capacity
         self.table = [None] * capacity
         self.occupied = 0
 
     def get_num_slots(self):
-        return len(self.capacity)
+        return self.capacity
 
 
     def get_load_factor(self):
@@ -39,61 +32,57 @@ class HashTable:
 
 
     def djb2(self, key):
-        """
-        DJB2 hash, 32-bit
-
-        Implement this, and/or FNV-1.
-        """
-        # Your code here
-        encoded_string = key.encode()
-
-        total = 0
-        for i in encoded_string:
-            total += i
-            total &= 0xffffffff
-        return total
-
+        hash_value = 5381
+        for x in key:
+            hash_value = ((hash_value << 5) + hash_value) + ord(x)
+        return hash_value
 
 
     def hash_index(self, key):
-        """
-        Take an arbitrary key and return a valid integer index
-        between within the storage capacity of the hash table.
-        """
-        #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
+
     def put(self, key, value):
-        """
-        Store the value with the given key.
+        # bucket being added to
+        current = self.table[self.hash_index(key)]
 
-        Hash collisions should be handled with Linked List Chaining.
+        if current is None:
+            self.table[self.hash_index(key)] = HashTableEntry(key, value)
+        else:
+            holder = current
+            while current.next is not None:
+                current = holder.next
 
-        Implement this.
-        """
-        # Your code here
+            current = HashTableEntry(key, value)
 
 
     def delete(self, key):
-        """
-        Remove the value stored with the given key.
-
-        Print a warning if the key is not found.
-
-        Implement this.
-        """
-        # Your code here
+        current = self.table[self.hash_index(key)]
+        if current.key == key:
+            if current.next is not None:
+                current = current.next
+            else:
+                current = None
+        else:
+            print("No value was found in this location")
 
 
     def get(self, key):
-        """
-        Retrieve the value stored with the given key.
+        search = self.table[self.hash_index(key)]
+        searching = None
 
-        Returns None if the key is not found.
+        if search is not None:
+            if search.key != key:
+                searching = search
+                while searching.next is not None:
+                    searching = searching.next
+                return searching
+            else:
+                return search
 
-        Implement this.
-        """
-        # Your code here
+        else:
+            return None
+
 
 
     def resize(self, new_capacity):
@@ -127,7 +116,7 @@ if __name__ == "__main__":
 
     # Test storing beyond capacity
     for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+        print(ht.get(f"line_{i}"), "SHOULD RETURN POEM")
 
     # Test resizing
     old_capacity = ht.get_num_slots()
