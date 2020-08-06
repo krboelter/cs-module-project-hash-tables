@@ -2,4 +2,5 @@
 # decode it.
 
 # Your code here
-
+def cipher_text():
+    pass

@@ -21,39 +21,21 @@ class HashTable:
     """
 
     def __init__(self, capacity):
-        # Your code here
-
+        self.capacity = capacity
+        self.table = [None] * capacity
+        self.occupied = 0
 
     def get_num_slots(self):
-        """
-        Return the length of the list you're using to hold the hash
-        table data. (Not the number of items stored in the hash table,
-        but the number of slots in the main list.)
-
-        One of the tests relies on this.
-
-        Implement this.
-        """
-        # Your code here
+        return len(self.capacity)
 
 
     def get_load_factor(self):
-        """
-        Return the load factor for this hash table.
-
-        Implement this.
-        """
-        # Your code here
+        return self.occupied / self.capacity # current occupied buckets / capacity
 
 
+    # not doing this one
     def fnv1(self, key):
-        """
-        FNV-1 Hash, 64-bit
-
-        Implement this, and/or DJB2.
-        """
-
-        # Your code here
+        pass
 
 
     def djb2(self, key):
@@ -63,6 +45,14 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        encoded_string = key.encode()
+
+        total = 0
+        for i in encoded_string:
+            total += i
+            total &= 0xffffffff
+        return total
+
 
 
     def hash_index(self, key):
