@@ -46,14 +46,19 @@ class HashTable:
         # bucket being added to
         current = self.table[self.hash_index(key)]
 
+        # for adding new value to empty bucket
         if current is None:
             self.table[self.hash_index(key)] = HashTableEntry(key, value)
         else:
-            holder = current
-            while current.next is not None:
-                current = holder.next
+            # for changing value of item
+            if key == current.key:
+                current.value = value
+            else:
+                holder = current
+                while current.next is not None:
+                    current = holder.next
 
-            current = HashTableEntry(key, value)
+                current = HashTableEntry(key, value)
 
 
     def delete(self, key):
@@ -62,7 +67,7 @@ class HashTable:
             if current.next is not None:
                 current = current.next
             else:
-                current = None
+                current.value = None
         else:
             print("No value was found in this location")
 
@@ -76,9 +81,9 @@ class HashTable:
                 searching = search
                 while searching.next is not None:
                     searching = searching.next
-                return searching
+                return searching.value
             else:
-                return search
+                return search.value
 
         else:
             return None
