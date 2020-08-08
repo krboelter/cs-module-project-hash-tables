@@ -16,14 +16,14 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity
         self.table = [None] * capacity
-        self.occupied = 0
+        self.count = 0
 
     def get_num_slots(self):
         return self.capacity
 
 
     def get_load_factor(self):
-        return self.occupied / self.capacity # current occupied buckets / capacity
+        return self.count / self.capacity # current occupied buckets / capacity
 
 
     # not doing this one
@@ -49,6 +49,7 @@ class HashTable:
         # for adding new value to empty bucket
         if current is None:
             self.table[self.hash_index(key)] = HashTableEntry(key, value)
+            self.count += 1
         else:
             # for changing value of item
             if key == current.key:
@@ -68,6 +69,7 @@ class HashTable:
                 current = current.next
             else:
                 current.value = None
+                self.count -= 1
         else:
             print("No value was found in this location")
 
