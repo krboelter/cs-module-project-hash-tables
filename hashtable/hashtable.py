@@ -16,6 +16,7 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity
         self.table = [None] * capacity
+        self.head = None
         self.count = 0
 
     def get_num_slots(self):
@@ -49,6 +50,7 @@ class HashTable:
         # for adding new value to empty bucket
         if current is None:
             self.table[self.hash_index(key)] = HashTableEntry(key, value)
+            self.head = self.table[self.hash_index(key)]
             self.count += 1
         else:
             # for changing value of item
