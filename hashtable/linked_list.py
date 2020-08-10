@@ -13,15 +13,19 @@ class LinkedList:
 
     def find(self, key):
         next_node = self.head
-        while next_node.next is not None:
-            if next_node.key == key:
-                # return the found item
-                return next_node
-            else:
-                next_node = next_node.next
 
         # value not found
-        return None
+        if next_node is None:
+            return None
+        else:
+            while next_node.next is not None:
+                if next_node.key == key:
+                    # return the found item
+                    return next_node
+                else:
+                    next_node = next_node.next
+
+        return next_node
 
 
     def delete(self, key):

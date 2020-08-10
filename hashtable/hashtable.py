@@ -62,7 +62,7 @@ class HashTable:
                 self.count += 1
             else:
                 # change the current node to the new node
-                current.changeValue(key, HashTableEntry(key, value))
+                current.change_value(key, HashTableEntry(key, value))
 
 
     def delete(self, key):
@@ -74,11 +74,14 @@ class HashTable:
 
     def get(self, key):
         current = self.table[self.hash_index(key)]
+        item = current.find(key)
 
-        if current.find(key) is not None:
-            return current.find(key).value
+        if item is not None:
+            # should return the node value
+            return item.value
         else:
-            return current.find(key)
+            # should return none
+            return item
 
 
     def resize(self, new_capacity):
