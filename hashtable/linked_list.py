@@ -3,7 +3,7 @@ class LinkedList:
         self.head = None
 
 
-    def add_head(self, node):
+    def add_new(self, node):
         if self.head is None:
             self.head = node
         else:
@@ -15,17 +15,19 @@ class LinkedList:
         next_node = self.head
         while next_node.next is not None:
             if next_node.key == key:
+                # return the found item
                 return next_node
             else:
                 next_node = next_node.next
 
-        print("No value found")
+        # value not found
+        return None
 
 
     def delete(self, key):
         if self.head is None:
-            print("There is no head")
-        else if self.head.next is None:
+            print("There is nothing to delete")
+        elif self.head.next is None:
             old = self.head
             self.head = None
 

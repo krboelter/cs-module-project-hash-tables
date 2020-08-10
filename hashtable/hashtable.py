@@ -1,3 +1,5 @@
+from linked_list import LinkedList
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -16,7 +18,6 @@ class HashTable:
     def __init__(self, capacity):
         self.capacity = capacity
         self.table = [None] * capacity
-        self.head = None
         self.count = 0
 
     def get_num_slots(self):
@@ -47,51 +48,37 @@ class HashTable:
         # bucket being added to
         current = self.table[self.hash_index(key)]
 
-        # for adding new value to empty bucket
+        # for adding new list to empty bucket
         if current is None:
-            self.table[self.hash_index(key)] = HashTableEntry(key, value)
-            self.head = self.table[self.hash_index(key)]
+            new_list = LinkedList()
+            self.table[self.hash_index(key)] = new_list
+            new_list.add_new(HashTableEntry(key, value))
             self.count += 1
+        # if there is already a list
         else:
-            # for changing value of item
-            if key == current.key:
-                current.value = value
+            # if the new key/item doesn't exist, add it as a new head
+            if current.find(key) == None:
+                current.add_new(HashTableEntry(key, value))
+                self.count += 1
             else:
-                holder = current
-                while current.next is not None:
-                    current = holder.next
-
-                current = HashTableEntry(key, value)
+                # change the current node to the new node
+                current.changeValue(key, HashTableEntry(key, value))
 
 
     def delete(self, key):
         current = self.table[self.hash_index(key)]
-        if current.key == key:
-            if current.next is not None:
-                current = current.next
-            else:
-                current.value = None
-                self.count -= 1
-        else:
-            print("No value was found in this location")
+
+        # prints a message if it doesn't exist
+        current.delete(key)
 
 
     def get(self, key):
-        search = self.table[self.hash_index(key)]
-        searching = None
+        current = self.table[self.hash_index(key)]
 
-        if search is not None:
-            if search.key != key:
-                searching = search
-                while searching.next is not None:
-                    searching = searching.next
-                return searching.value
-            else:
-                return search.value
-
+        if current.find(key) is not None:
+            return current.find(key).value
         else:
-            return None
-
+            return current.find(key)
 
 
     def resize(self, new_capacity):
