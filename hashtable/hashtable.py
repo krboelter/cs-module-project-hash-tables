@@ -45,6 +45,10 @@ class HashTable:
 
 
     def put(self, key, value):
+        # resize if needed
+        if self.get_load_factor() >= 0.7:
+            self.resize(self.capacity * 2)
+
         # bucket being added to
         current = self.table[self.hash_index(key)]
 
@@ -85,20 +89,15 @@ class HashTable:
 
 
     def resize(self, new_capacity):
-        """
-        Changes the capacity of the hash table and
-        rehashes all key/value pairs.
-
-        Implement this.
-        """
         old = self.table
-        new = HashTable(self.capacity * 2)
-        # loop through all the indexes, at least get the first one, and rehash
+        self.capacity = new_capacity
+        self.table = [None] * self.capacity
+
         for i in old:
             if i is None:
                 continue
             else:
-                new.put(i.head.key, i.head.value)
+                self.put(i.head.key, i.head.value)
 
 
 
