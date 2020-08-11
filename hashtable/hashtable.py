@@ -91,7 +91,14 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        old = self.table
+        new = HashTable(self.capacity * 2)
+        # loop through all the indexes, at least get the first one, and rehash
+        for i in old:
+            if i is None:
+                continue
+            else:
+                new.put(i.head.key, i.head.value)
 
 
 
