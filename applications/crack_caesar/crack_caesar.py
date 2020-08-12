@@ -50,6 +50,6 @@ def cipher_text():
         else:
             plain_text += freq[char]
 
-    print(plain_text)
+    return plain_text
 
-cipher_text()
+print(cipher_text())
