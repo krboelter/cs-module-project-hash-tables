@@ -1,5 +1,16 @@
 def no_dups(s):
-    # Your code here
+    words = s.split()
+    word_dict = {}
+
+    for word in words:
+        word_dict[word] = 1
+
+    answer = []
+    for k in word_dict.keys():
+        answer.append(k)
+
+    return answer
+
 
 
 
