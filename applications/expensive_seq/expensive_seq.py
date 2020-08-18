@@ -1,5 +1,3 @@
-# Your code here
-
 cache = {}
 def expensive_seq(x, y, z):
     if x <= 0:

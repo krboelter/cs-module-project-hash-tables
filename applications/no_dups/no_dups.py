@@ -5,11 +5,14 @@ def no_dups(s):
     for word in words:
         word_dict[word] = 1
 
-    answer = []
+    words = []
     for k in word_dict.keys():
-        answer.append(k)
+        words.append(k)
 
-    return answer
+    if s == "":
+        return ""
+    else:
+        return " ".join(words)
 
 
 
