@@ -1,5 +1,4 @@
-# Your code here
-
+import random, math
 
 def slowfun_too_slow(x, y):
     v = math.pow(x, y)
@@ -9,14 +8,25 @@ def slowfun_too_slow(x, y):
 
     return v
 
+lookup_table = {}
+
+def create_lookup_table(x, y):
+    for i in range(2, 15):
+        for j in range(3, 7):
+            lookup_table[(i, j)] = 0
+
+    for (x, y) in lookup_table.keys():
+        lookup_table[(x, y)] = slowfun_too_slow(x, y)
+        print(lookup_table[(x, y)])
+
+
 def slowfun(x, y):
-    """
-    Rewrite slowfun_too_slow() in here so that the program produces the same
-    output, but completes quickly instead of taking ages to run.
-    """
-    # Your code here
-
-
+    if len(lookup_table) < 1:
+        create_lookup_table(x, y)
+    else:
+        return lookup_table[(x, y)]
+        
+    print(lookup_table)
 
 # Do not modify below this line!
 

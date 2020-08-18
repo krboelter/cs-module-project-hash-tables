@@ -1,3 +1,5 @@
+from linked_list import LinkedList
+
 class HashTableEntry:
     """
     Linked List hash table key/value pair
@@ -13,107 +15,89 @@ MIN_CAPACITY = 8
 
 
 class HashTable:
-    """
-    A hash table that with `capacity` buckets
-    that accepts string keys
-
-    Implement this.
-    """
-
     def __init__(self, capacity):
-        # Your code here
-
+        self.capacity = capacity
+        self.table = [None] * capacity
+        self.count = 0
 
     def get_num_slots(self):
-        """
-        Return the length of the list you're using to hold the hash
-        table data. (Not the number of items stored in the hash table,
-        but the number of slots in the main list.)
-
-        One of the tests relies on this.
-
-        Implement this.
-        """
-        # Your code here
+        return self.capacity
 
 
     def get_load_factor(self):
-        """
-        Return the load factor for this hash table.
-
-        Implement this.
-        """
-        # Your code here
+        return self.count / self.capacity # current occupied buckets / capacity
 
 
+    # not doing this one
     def fnv1(self, key):
-        """
-        FNV-1 Hash, 64-bit
-
-        Implement this, and/or DJB2.
-        """
-
-        # Your code here
+        pass
 
 
     def djb2(self, key):
-        """
-        DJB2 hash, 32-bit
-
-        Implement this, and/or FNV-1.
-        """
-        # Your code here
+        hash_value = 5381
+        for x in key:
+            hash_value = ((hash_value << 5) + hash_value) + ord(x)
+        return hash_value
 
 
     def hash_index(self, key):
-        """
-        Take an arbitrary key and return a valid integer index
-        between within the storage capacity of the hash table.
-        """
-        #return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
+
     def put(self, key, value):
-        """
-        Store the value with the given key.
+        # resize if needed
+        if self.get_load_factor() >= 0.7:
+            self.resize(self.capacity * 2)
 
-        Hash collisions should be handled with Linked List Chaining.
+        # bucket being added to
+        current = self.table[self.hash_index(key)]
 
-        Implement this.
-        """
-        # Your code here
+        # for adding new list to empty bucket
+        if current is None:
+            new_list = LinkedList()
+            self.table[self.hash_index(key)] = new_list
+            new_list.add_new(HashTableEntry(key, value))
+            self.count += 1
+        # if there is already a list
+        else:
+            # if the new key/item doesn't exist, add it as a new head
+            if current.find(key) == None:
+                current.add_new(HashTableEntry(key, value))
+                self.count += 1
+            else:
+                # change the current node to the new node
+                current.change_value(key, HashTableEntry(key, value))
 
 
     def delete(self, key):
-        """
-        Remove the value stored with the given key.
+        current = self.table[self.hash_index(key)]
 
-        Print a warning if the key is not found.
-
-        Implement this.
-        """
-        # Your code here
+        # prints a message if it doesn't exist
+        current.delete(key)
 
 
     def get(self, key):
-        """
-        Retrieve the value stored with the given key.
+        current = self.table[self.hash_index(key)]
+        item = current.find(key)
 
-        Returns None if the key is not found.
-
-        Implement this.
-        """
-        # Your code here
+        if item is not None:
+            # should return the node value
+            return item.value
+        else:
+            # should return none
+            return item
 
 
     def resize(self, new_capacity):
-        """
-        Changes the capacity of the hash table and
-        rehashes all key/value pairs.
+        old = self.table
+        self.capacity = new_capacity
+        self.table = [None] * self.capacity
 
-        Implement this.
-        """
-        # Your code here
+        for i in old:
+            if i is None:
+                continue
+            else:
+                self.put(i.head.key, i.head.value)
 
 
 
@@ -137,7 +121,7 @@ if __name__ == "__main__":
 
     # Test storing beyond capacity
     for i in range(1, 13):
-        print(ht.get(f"line_{i}"))
+        print(ht.get(f"line_{i}"), "SHOULD RETURN POEM")
 
     # Test resizing
     old_capacity = ht.get_num_slots()
